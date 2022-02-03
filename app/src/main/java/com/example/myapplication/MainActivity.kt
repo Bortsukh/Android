@@ -8,56 +8,45 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.FilmDetailsActivity.Companion.FILM_DETAILS_COMMENTS
 import com.example.myapplication.FilmDetailsActivity.Companion.FILM_DETAILS_LIKE
 
 class MainActivity : AppCompatActivity() {
+    val favoriteList = mutableListOf<RecyclerItem>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setButtonHandler(R.id.details_film_1, R.id.name_film_1, R.string.harry_potter_description, R.drawable.harry_potter)
-        setButtonHandler(R.id.details_film_2, R.id.name_film_2, R.string.back_to_future_description, R.drawable.back_to_the_future)
-        setButtonHandler(R.id.details_film_3, R.id.name_film_3, R.string.star_wars_description, R.drawable.star_wars)
         inviteFriend()
+        initRecycler()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(FILM_NAME_1_TEXT_COLORS, findViewById<TextView>(R.id.name_film_1).currentTextColor)
-        outState.putInt(FILM_NAME_2_TEXT_COLORS, findViewById<TextView>(R.id.name_film_2).currentTextColor)
-        outState.putInt(FILM_NAME_3_TEXT_COLORS, findViewById<TextView>(R.id.name_film_3).currentTextColor)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        var film_name_1_color = savedInstanceState.getInt(FILM_NAME_1_TEXT_COLORS)
-        findViewById<TextView>(R.id.name_film_1).setTextColor(film_name_1_color)
-        var film_name_2_color = savedInstanceState.getInt(FILM_NAME_2_TEXT_COLORS)
-        findViewById<TextView>(R.id.name_film_2).setTextColor(film_name_2_color)
-        var film_name_3_color = savedInstanceState.getInt(FILM_NAME_3_TEXT_COLORS)
-        findViewById<TextView>(R.id.name_film_3).setTextColor(film_name_3_color)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
-                if (data != null) {
-                    Log.d("Like", data.getBooleanExtra(FILM_DETAILS_LIKE, false).toString())
-                    Log.d("Comment", data.getStringExtra(FILM_DETAILS_COMMENTS).toString())
-                }
+    fun initRecycler() {
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = RecyclerAdapter(getList(), object: FavoriteClickListener{
+            override fun onFavoriteClick(recyclerItem: RecyclerItem, position: Int) {
+              favoriteList.add(recyclerItem)
+                Log.d("1234567", favoriteList.size.toString())
             }
-        }
+
+        })
     }
 
-    private fun setButtonHandler(buttonId: Int, textViewId: Int, detail: Int, imageId: Int) {
-        findViewById<Button>(buttonId).setOnClickListener {
-            findViewById<TextView>(textViewId).setTextColor(Color.RED)
-            val intent = Intent(this, FilmDetailsActivity::class.java)
-            intent.putExtra(FILM_DETAILS, getString(detail))
-            intent.putExtra(FILM_IMAGE, imageId)
-            startActivityForResult(intent, REQUEST_CODE)
-        }
+    fun getList() : List<RecyclerItem> {
+        val list = mutableListOf<RecyclerItem>()
+        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter)))
+        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars)))
+        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future)))
+        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter)))
+        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars)))
+        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future)))
+        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter)))
+        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars)))
+        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future)))
+        return list
     }
 
     private fun inviteFriend() {
