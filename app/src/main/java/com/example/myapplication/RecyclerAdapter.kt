@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter(
-    private val values: List<RecyclerItem>,
-    private val itemClickListener: FavoriteClickListener
+    private val values: MutableList<RecyclerItem>,
+    private val itemClickListener: RecyclerItemClickListener
     ) : RecyclerView.Adapter<RecyclerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val itemView =
@@ -22,7 +22,18 @@ class RecyclerAdapter(
     override fun getItemCount(): Int {
         return values.size
     }
+
+    fun removeItem(position: Int) {
+        values.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun changeColorFavorite(item: RecyclerItem) {
+        values.asSequence().filter { it.nameFilm == item.nameFilm }.forEach { it.isFavorite = false }
+        notifyDataSetChanged()
+    }
 }
-interface FavoriteClickListener {
-    fun onFavoriteClick(recyclerItem: RecyclerItem, position: Int)
+interface RecyclerItemClickListener {
+    fun onItemLongClick(recyclerItem: RecyclerItem, position: Int)
+    fun onItemShortClick(recyclerItem: RecyclerItem, position: Int)
 }
