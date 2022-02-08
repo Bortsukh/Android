@@ -19,48 +19,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         inviteFriend()
-        initRecycler()
+        //initRecycler()
         favoritesFilms()
-    }
-
-    fun initRecycler() {
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = RecyclerAdapter(getList() as MutableList<RecyclerItem>, object: RecyclerItemClickListener{
-            override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
-                recyclerItem.isFavorite = true
-              favoriteList.add(recyclerItem)
-                Log.d("1234567", favoriteList.size.toString())
-            }
-
-            override fun onItemShortClick(recyclerItem: RecyclerItem, position: Int) {
-                val intent = Intent(this@MainActivity, FilmDetailsActivity::class.java)
-                intent.putExtra(FILM_DETAILS, recyclerItem.filmDetails)
-                intent.putExtra(FILM_IMAGE, recyclerItem.imageFilm)
-                startActivity(intent)
-            }
-
-        })
-        mainRecyclerAdapter = recyclerView.adapter as RecyclerAdapter
-
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        ResourcesCompat.getDrawable(resources, R.drawable.black_line_5dp, theme)
-            ?.let { divider.setDrawable(it) }
-        recyclerView.addItemDecoration(divider)
-    }
-
-    fun getList() : List<RecyclerItem> {
-        val list = mutableListOf<RecyclerItem>()
-        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter), getString(R.string.harry_potter_description),false))
-        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars), getString(R.string.star_wars_description), false))
-        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future), getString(R.string.back_to_future_description),false))
-        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter), getString(R.string.harry_potter_description),false))
-        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars), getString(R.string.star_wars_description),false))
-        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future), getString(R.string.back_to_future_description),false))
-        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter), getString(R.string.harry_potter_description),false))
-        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars), getString(R.string.star_wars_description),false))
-        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future), getString(R.string.back_to_future_description),false))
-        return list
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frame_layout, MainFragment())
+            .commit()
     }
 
     private fun inviteFriend() {
@@ -75,8 +38,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun favoritesFilms() {
         findViewById<Button>(R.id.favorite).setOnClickListener {
-            val intent = Intent(this, FavoriteActivity::class.java)
-            startActivity(intent)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame_layout, FavoritesFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -85,10 +50,6 @@ class MainActivity : AppCompatActivity() {
         const val FILM_IMAGE = "FILM_IMAGE"
         val favoriteList = mutableSetOf<RecyclerItem>()
         var mainRecyclerAdapter : RecyclerAdapter? = null
-        const val FILM_NAME_1_TEXT_COLORS = "film_name_1_text_colors"
-        const val FILM_NAME_2_TEXT_COLORS = "film_name_2_text_colors"
-        const val FILM_NAME_3_TEXT_COLORS = "film_name_3_text_colors"
-        const val REQUEST_CODE = 200
     }
 
     override fun onBackPressed() {
