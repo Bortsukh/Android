@@ -12,19 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <Button
-        android:id="@+id/invite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/invite_friend"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/invite"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/invite_friend"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
-    <Button
-        android:id="@+id/favorite"
-        android:layout_width="match_parent"
+<!--    <Button-->
+<!--        android:id="@+id/favorite"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/favorites"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/invite" />-->
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigate"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/favorites"
-        app:layout_constraintBottom_toTopOf="@+id/invite" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

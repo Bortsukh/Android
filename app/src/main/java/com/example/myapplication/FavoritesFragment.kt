@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 
 class FavoritesFragment : Fragment() {
 
@@ -26,6 +27,7 @@ class FavoritesFragment : Fragment() {
                 MainActivity.favoriteList.remove(recyclerItem)
                 (recyclerView.adapter as RecyclerAdapter)?.removeItem(position)
                 MainActivity.mainRecyclerAdapter?.changeColorFavorite(recyclerItem)
+                Snackbar.make(recyclerView,"Удалено из избранного", Snackbar.LENGTH_LONG).show()
             }
 
             override fun onItemShortClick(recyclerItem: RecyclerItem, position: Int) {

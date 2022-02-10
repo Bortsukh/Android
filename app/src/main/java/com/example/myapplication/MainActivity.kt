@@ -12,36 +12,44 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        inviteFriend()
         //initRecycler()
-        favoritesFilms()
+        menuAction()
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frame_layout, MainFragment())
             .commit()
     }
 
-    private fun inviteFriend() {
-        findViewById<Button>(R.id.invite).setOnClickListener {
-        val intent = Intent(Intent.ACTION_SENDTO)
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Invite in the Best App.")
-        intent.putExtra(Intent.EXTRA_TEXT, "Hi Friend. Open the Best App.")
-        intent.setData(Uri.parse("mailto:"))
-            startActivity(intent)
-        }
-    }
-
-    private fun favoritesFilms() {
-        findViewById<Button>(R.id.favorite).setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frame_layout, FavoritesFragment())
-                .addToBackStack(null)
-                .commit()
+    private fun menuAction() {
+        findViewById<BottomNavigationView>(R.id.navigate).setOnNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.nav_invite -> {
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Invite in the Best App.")
+                    intent.putExtra(Intent.EXTRA_TEXT, "Hi Friend. Open the Best App.")
+                    intent.setData(Uri.parse("mailto:"))
+                    startActivity(intent)
+                }
+                R.id.nav_favorites -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frame_layout, FavoritesFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.nav_home -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frame_layout, MainFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+            true
         }
     }
 

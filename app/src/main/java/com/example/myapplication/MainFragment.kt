@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -31,6 +32,7 @@ class MainFragment : Fragment() {
             override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
                 recyclerItem.isFavorite = true
                 MainActivity.favoriteList.add(recyclerItem)
+                Toast.makeText(context,"Успешно добавлено", Toast.LENGTH_LONG).show()
                 Log.d("1234567", MainActivity.favoriteList.size.toString())
             }
 
