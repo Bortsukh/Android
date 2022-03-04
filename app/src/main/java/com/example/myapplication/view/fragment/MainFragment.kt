@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.view.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -9,8 +9,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.*
+import com.example.myapplication.model.api.FilmModel
+import com.example.myapplication.model.db.RecyclerItem
+import com.example.myapplication.view.activity.MainActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainFragment : Fragment() {
+
+    var listOfObject: MutableList<RecyclerItem> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +37,7 @@ class MainFragment : Fragment() {
     fun initRecycler(view: View) : View{
         val recyclerView: RecyclerView = view as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = RecyclerAdapter(getList() as MutableList<RecyclerItem>, object: RecyclerItemClickListener{
+        recyclerView.adapter = RecyclerAdapter(listOfObject, object: RecyclerItemClickListener {
             override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
                 recyclerItem.isFavorite = true
                 MainActivity.favoriteList.add(recyclerItem)
@@ -40,29 +49,45 @@ class MainFragment : Fragment() {
                 val fragment = DetailsFragment()
                 val arguments = Bundle().apply {
                     putString(FILM_DETAILS, recyclerItem.filmDetails)
-                    putInt(FILM_IMAGE, recyclerItem.imageFilm) }
+                    putString(FILM_IMAGE, recyclerItem.imageFilm) }
                 fragment.arguments = arguments
                 activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment).commit()
             }
         })
         MainActivity.mainRecyclerAdapter = recyclerView.adapter as RecyclerAdapter
+        getList()
         return recyclerView
     }
 
-    fun getList() : List<RecyclerItem> {
-        val list = mutableListOf<RecyclerItem>()
-        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter), getString(R.string.harry_potter_description),false))
-        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars), getString(R.string.star_wars_description), false))
-        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future), getString(R.string.back_to_future_description),false))
-        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter), getString(R.string.harry_potter_description),false))
-        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars), getString(R.string.star_wars_description),false))
-        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future), getString(R.string.back_to_future_description),false))
-        list.add(RecyclerItem(R.drawable.harry_potter, getString(R.string.harry_potter), getString(R.string.harry_potter_description),false))
-        list.add(RecyclerItem(R.drawable.star_wars, getString(R.string.star_wars), getString(R.string.star_wars_description),false))
-        list.add(RecyclerItem(R.drawable.back_to_the_future, getString(R.string.back_to_future), getString(R.string.back_to_future_description),false))
-        return list
-    }
+    fun getList() {
 
+        App.instance.api.getFilmListWithPages().enqueue(object : Callback<FilmModel> {
+            override fun onFailure(call: Call<FilmModel>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<FilmModel>,
+                response: Response<FilmModel>
+            ) {
+                listOfObject.clear()
+                if (response.isSuccessful) {
+                    response.body()?.data
+                        ?.forEach {
+                            listOfObject.add(
+                                RecyclerItem(
+                                    it.attributes.posterImage.medium,
+                                    it.attributes.title,
+                                    it.attributes.description,
+                                    false
+                                )
+                            )
+                        }
+                }
+                MainActivity.mainRecyclerAdapter?.notifyDataSetChanged()
+            }
+        })
+    }
 
     companion object {
         const val FILM_DETAILS = "FILM_NAME"

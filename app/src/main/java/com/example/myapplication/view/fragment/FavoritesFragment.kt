@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.view.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.*
+import com.example.myapplication.model.db.RecyclerItem
+import com.example.myapplication.view.activity.MainActivity
 import com.google.android.material.snackbar.Snackbar
 
 class FavoritesFragment : Fragment() {
@@ -22,7 +25,7 @@ class FavoritesFragment : Fragment() {
 
     fun initRecycler(recyclerView :RecyclerView) : View {
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = RecyclerAdapter(MainActivity.favoriteList.toMutableList(), object: RecyclerItemClickListener{
+        recyclerView.adapter = RecyclerAdapter(MainActivity.favoriteList.toMutableList(), object: RecyclerItemClickListener {
             override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
                 MainActivity.favoriteList.remove(recyclerItem)
                 (recyclerView.adapter as RecyclerAdapter)?.removeItem(position)
@@ -34,7 +37,7 @@ class FavoritesFragment : Fragment() {
                 val fragment = DetailsFragment()
                 val arguments = Bundle().apply {
                     putString(MainFragment.FILM_DETAILS, recyclerItem.filmDetails)
-                    putInt(MainFragment.FILM_IMAGE, recyclerItem.imageFilm) }
+                    putString(MainFragment.FILM_IMAGE, recyclerItem.imageFilm) }
                 fragment.arguments = arguments
                 activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment).commit()
             }

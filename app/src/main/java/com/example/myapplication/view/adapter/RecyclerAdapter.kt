@@ -3,6 +3,8 @@ package com.example.myapplication
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.model.db.RecyclerItem
+import com.example.myapplication.view.viewholders.RecyclerViewHolder
 
 class RecyclerAdapter(
     private val values: MutableList<RecyclerItem>,

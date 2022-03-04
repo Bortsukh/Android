@@ -1,17 +1,14 @@
-package com.example.myapplication
+package com.example.myapplication.view.activity
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.*
+import com.example.myapplication.model.db.RecyclerItem
+import com.example.myapplication.view.fragment.FavoritesFragment
+import com.example.myapplication.view.fragment.MainFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //initRecycler()
         menuAction()
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frame_layout, MainFragment())
