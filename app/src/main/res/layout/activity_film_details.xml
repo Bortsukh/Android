@@ -28,19 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="TextView" />
-
-        <CheckBox
-            android:id="@+id/details_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/like" />
-
-        <EditText
-            android:id="@+id/details_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Here You can add your commnets" />
-
-
     </LinearLayout>
+
 </LinearLayout>
