@@ -1,19 +1,29 @@
 package com.example.myapplication
 
 import android.app.Application
+import androidx.room.Room
 import com.example.myapplication.model.api.Api
+import com.example.myapplication.model.db.AppDataBase
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class App : Application() {
 
     lateinit var api: Api
 
+    lateinit var db: AppDataBase
+
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDataBase::class.java, "database"
+        ).allowMainThreadQueries().build()
 
         initRetrofit()
     }
@@ -37,9 +47,7 @@ class App : Application() {
             .addInterceptor(
                 HttpLoggingInterceptor()
                 .apply {
-//                    if (BuildConfig.) {
                         level = HttpLoggingInterceptor.Level.BODY
-//                    }
                 })
             .build()
 

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.*
-import com.example.myapplication.model.db.RecyclerItem
 import com.example.myapplication.view.fragment.FavoritesFragment
 import com.example.myapplication.view.fragment.MainFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -47,13 +46,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-    }
-
-    companion object {
-        const val FILM_DETAILS = "FILM_NAME"
-        const val FILM_IMAGE = "FILM_IMAGE"
-        val favoriteList = mutableSetOf<RecyclerItem>()
-        var mainRecyclerAdapter : RecyclerAdapter? = null
     }
 
     override fun onBackPressed() {

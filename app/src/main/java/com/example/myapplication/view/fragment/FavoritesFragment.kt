@@ -5,43 +5,59 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.*
 import com.example.myapplication.model.db.RecyclerItem
 import com.example.myapplication.view.activity.MainActivity
+import com.example.myapplication.viewmodel.FavoritesViewModel
+import androidx.lifecycle.Observer
+import com.example.myapplication.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class FavoritesFragment : Fragment() {
+
+    private lateinit var vm : FavoritesViewModel
+
+    private fun deleteFromFavorites(recyclerItem: RecyclerItem, position: Int) {
+        App.instance.db.recyclerItemDao.updateFavourites(recyclerItem.nameFilm, 0)
+        adapter.removeItem(position)
+        Snackbar.make(requireView(),"Удалено из избранного", Snackbar.LENGTH_LONG).show()
+    }
+
+    private val adapter = RecyclerAdapter(/*MainActivity.favoriteList.toMutableList(), */object: RecyclerItemClickListener {
+        override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
+            deleteFromFavorites(recyclerItem, position)
+        }
+
+        override fun onItemShortClick(recyclerItem: RecyclerItem, position: Int) {
+            val fragment = DetailsFragment()
+            val arguments = Bundle().apply {
+                putString(MainFragment.FILM_DETAILS, recyclerItem.filmDetails)
+                putString(MainFragment.FILM_IMAGE, recyclerItem.imageFilm) }
+            fragment.arguments = arguments
+            activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment).commit()
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_favorites, container, false)
-        return initRecycler(view as RecyclerView)
+        vm = ViewModelProviders.of(this).get(FavoritesViewModel::class.java)
+        return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
 
-    fun initRecycler(recyclerView :RecyclerView) : View {
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = RecyclerAdapter(MainActivity.favoriteList.toMutableList(), object: RecyclerItemClickListener {
-            override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
-                MainActivity.favoriteList.remove(recyclerItem)
-                (recyclerView.adapter as RecyclerAdapter)?.removeItem(position)
-                MainActivity.mainRecyclerAdapter?.changeColorFavorite(recyclerItem)
-                Snackbar.make(recyclerView,"Удалено из избранного", Snackbar.LENGTH_LONG).show()
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecycler()
+        vm.listOfObject.observe(this, Observer<List<RecyclerItem>> { list -> adapter.setValues(list) })
+    }
 
-            override fun onItemShortClick(recyclerItem: RecyclerItem, position: Int) {
-                val fragment = DetailsFragment()
-                val arguments = Bundle().apply {
-                    putString(MainFragment.FILM_DETAILS, recyclerItem.filmDetails)
-                    putString(MainFragment.FILM_IMAGE, recyclerItem.imageFilm) }
-                fragment.arguments = arguments
-                activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment).commit()
-            }
-        })
-        return recyclerView
+    fun initRecycler() {
+        val recyclerView: RecyclerView = requireView().findViewById(R.id.recyclerViewFavorites)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
     }
 }
