@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.*
@@ -58,7 +59,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
-        vm.listOfObject.observe(this, Observer<List<RecyclerItem>> { list -> adapter.setValues(list) })
+        vm.listOfObject?.observe(this, Observer<PagedList<RecyclerItem>> { list -> adapter.submitList(list) })
     }
 
     fun initRecycler() {

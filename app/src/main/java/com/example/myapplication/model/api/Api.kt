@@ -6,5 +6,6 @@ import retrofit2.http.*
 interface Api {
 
         @GET("anime")
-        fun getFilmListWithPages(): Call<FilmModel>
+        fun getFilmListWithPages(@Query("page[limit]") items: Int,
+                                 @Query("page[offset]") sincePage: Int): Call<FilmModel>
 }

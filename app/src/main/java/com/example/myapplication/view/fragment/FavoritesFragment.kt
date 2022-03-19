@@ -13,6 +13,7 @@ import com.example.myapplication.model.db.RecyclerItem
 import com.example.myapplication.view.activity.MainActivity
 import com.example.myapplication.viewmodel.FavoritesViewModel
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.example.myapplication.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -22,11 +23,10 @@ class FavoritesFragment : Fragment() {
 
     private fun deleteFromFavorites(recyclerItem: RecyclerItem, position: Int) {
         App.instance.db.recyclerItemDao.updateFavourites(recyclerItem.nameFilm, 0)
-        adapter.removeItem(position)
         Snackbar.make(requireView(),"Удалено из избранного", Snackbar.LENGTH_LONG).show()
     }
 
-    private val adapter = RecyclerAdapter(/*MainActivity.favoriteList.toMutableList(), */object: RecyclerItemClickListener {
+    private val adapter = RecyclerAdapter(object: RecyclerItemClickListener {
         override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
             deleteFromFavorites(recyclerItem, position)
         }
@@ -52,7 +52,7 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
-        vm.listOfObject.observe(this, Observer<List<RecyclerItem>> { list -> adapter.setValues(list) })
+        vm.listOfObject?.observe(this, Observer<PagedList<RecyclerItem>> { list -> adapter.submitList(list) })
     }
 
     fun initRecycler() {
