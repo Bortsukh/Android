@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myapplication.*
 import com.example.myapplication.model.api.FilmModel
 import com.example.myapplication.model.db.RecyclerItem
@@ -60,6 +61,17 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
         vm.listOfObject?.observe(this, Observer<PagedList<RecyclerItem>> { list -> adapter.submitList(list) })
+        vm.errorFromApi?.observe(this, Observer<String> { errorMessage -> Toast.makeText(context,errorMessage,Toast.LENGTH_LONG).show() })
+        val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
+        swipeRefreshLayout.setOnRefreshListener {
+            // Initialize a new Runnable
+            val runnable = Runnable {
+                vm.refreshRequestToApi()
+                // Hide swipe to refresh icon animation
+                swipeRefreshLayout.isRefreshing = false
+            }
+            Thread(runnable).start()
+        }
     }
 
     fun initRecycler() {
