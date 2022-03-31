@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.*
+import com.example.myapplication.view.fragment.DetailsFragment
 import com.example.myapplication.view.fragment.FavoritesFragment
 import com.example.myapplication.view.fragment.MainFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,9 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         menuAction()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frame_layout, MainFragment())
-            .commit()
+        intentHandler()
     }
 
     private fun menuAction() {
@@ -60,5 +59,22 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         alertDialogBuilder.show()
+    }
+
+    private fun intentHandler() {
+        if (intent.extras?.getString(DetailsFragment.FILM_DETAILS)!= null) {
+            val fragmentDetail = DetailsFragment()
+            val arguments = Bundle().apply {
+                putString(DetailsFragment.FILM_DETAILS, intent.extras?.getString(DetailsFragment.FILM_DETAILS))
+                putString(DetailsFragment.FILM_IMAGE, intent.extras?.getString(DetailsFragment.FILM_IMAGE)) }
+            fragmentDetail.arguments = arguments
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame_layout, fragmentDetail)
+                .commit()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame_layout, MainFragment())
+                .commit()
+        }
     }
 }

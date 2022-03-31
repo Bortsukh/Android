@@ -38,8 +38,8 @@ class MainFragment : Fragment() {
         override fun onItemShortClick(recyclerItem: RecyclerItem, position: Int) {
             val fragment = DetailsFragment()
             val arguments = Bundle().apply {
-                putString(FILM_DETAILS, recyclerItem.filmDetails)
-                putString(FILM_IMAGE, recyclerItem.imageFilm) }
+                putString(DetailsFragment.FILM_DETAILS, recyclerItem.filmDetails)
+                putString(DetailsFragment.FILM_IMAGE, recyclerItem.imageFilm) }
             fragment.arguments = arguments
             activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment).commit()
         }
@@ -78,12 +78,6 @@ class MainFragment : Fragment() {
         val recyclerView: RecyclerView = requireView().findViewById(R.id.fragment_main)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
-    }
-
-
-    companion object {
-        const val FILM_DETAILS = "FILM_NAME"
-        const val FILM_IMAGE = "FILM_IMAGE"
     }
 
 }
