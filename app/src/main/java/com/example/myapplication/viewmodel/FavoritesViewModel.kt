@@ -11,5 +11,5 @@ import com.example.myapplication.view.activity.MainActivity
 
 class FavoritesViewModel: ViewModel() {
     val listOfObject: LiveData<PagedList<RecyclerItem>>? =
-        App.instance.db.recyclerItemDao.getAllFavourites()?.toLiveData(pageSize = 10)
+        App.appComponent.db().recyclerItemDao.getAllFavourites()?.toLiveData(pageSize = 10)
 }

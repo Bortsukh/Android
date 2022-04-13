@@ -8,7 +8,7 @@ import com.example.myapplication.model.db.RecyclerItem
 import com.example.myapplication.model.db.RecyclerItemDao
 
 class BoundaryCallBack(val repository: Repository) : PagedList.BoundaryCallback<RecyclerItem>() {
-    private val dao: RecyclerItemDao = App.instance.db.recyclerItemDao
+    private val dao: RecyclerItemDao = App.appComponent.db().recyclerItemDao
     private var lastRequestedPage = 0
 
     /**
