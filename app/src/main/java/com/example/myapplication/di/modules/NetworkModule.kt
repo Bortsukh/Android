@@ -39,6 +39,7 @@ class NetworkModule {
 
         val retrofit = Retrofit.Builder()
             .baseUrl(App.BASE_URL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
