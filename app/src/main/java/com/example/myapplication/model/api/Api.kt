@@ -10,5 +10,5 @@ interface Api {
 
         @GET("anime")
         fun getFilmListWithPages(@Query("page[limit]") items: Int,
-                                 @Query("page[offset]") sincePage: Int): Observable<FilmModel>
+                                 @Query("page[offset]") sincePage: Int): Single<FilmModel>
 }

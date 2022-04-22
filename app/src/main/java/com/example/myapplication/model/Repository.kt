@@ -18,6 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
+private const val TAG = "Repository"
 class Repository {
 
     @Inject
@@ -63,67 +64,25 @@ class Repository {
 //    }
 //
 
-    fun getFromApiAndSaveToDb(offset: Int) {
-    api.getFilmListWithPages(App.PAGE_SIZE, offset)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(object : Observer<FilmModel> {
-            //            override fun onSuccess(
-//                response: FilmModel
-//            ) {
-//                val list = mutableListOf<RecyclerItem>()
-//                response.data
-//                    ?.forEach {
-//                        list.add(
-//                            RecyclerItem(
-//                                it.attributes.posterImage.medium,
-//                                it.attributes.title,
-//                                it.attributes.description,
-//                                false
-//                            )
-//                        )
-//                    }
-//
-//                db.recyclerItemDao.saveAll(list)
-//            }
-//            override fun onError(t: Throwable) {
-//                error.value = t.message
-//                Log.d("FAILURE", "ошибка при получении данных")
-//            }
-//
-//            override fun onSubscribe(d: Disposable) {}
-
-            override fun onSubscribe(d: Disposable) {
-                Log.d("FAILURE", "ошибка при получении данных onSubscribe")
-            }
-
-            override fun onNext(response: FilmModel) {
-                val list = mutableListOf<RecyclerItem>()
-                response.data
-                    ?.forEach {
-                        list.add(
-                            RecyclerItem(
-                                it.attributes.posterImage.medium,
-                                it.attributes.title,
-                                it.attributes.description,
-                                false
-                            )
-                        )
-                    }
-
-                db.recyclerItemDao.saveAll(list)
-            }
-
-            override fun onError(t: Throwable) {
-                error.value = t.message
-                Log.d("FAILURE", "ошибка при получении данных onError")
-            }
-
-            override fun onComplete() {
-                Log.d("FAILURE", "ошибка при получении данных onComplete")
-            }
-
-        })
+    fun getFromApiAndSaveToDb(offset: Int): Disposable {
+        Log.d(TAG, "[getFromApiAndSaveToDb] offset: $offset")
+        return api.getFilmListWithPages(App.PAGE_SIZE, offset)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                Log.v(TAG, "[getFromApiAndSaveToDb] succeed: $response")
+                val items = response.data.map {
+                    RecyclerItem(
+                        it.attributes.posterImage.medium,
+                        it.attributes.title,
+                        it.attributes.description,
+                        false
+                    )
+                }
+                db.recyclerItemDao.saveAll(items) }, {
+                            Log.e(TAG, "[getFromApiAndSaveToDb] failed: $it", it)
+                            error.value = it.message
+                })
     }
 
 }

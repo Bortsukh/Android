@@ -50,7 +50,7 @@ class App : Application() {
         lateinit var instance: App
             private set
 
-        const val PAGE_SIZE = 10
+        const val PAGE_SIZE = 20
 
         lateinit var appComponent: AppComponent
     }
