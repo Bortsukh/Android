@@ -31,7 +31,7 @@ class MainFragment : Fragment() {
     private val adapter = RecyclerAdapter( object: RecyclerItemClickListener {
         override fun onItemLongClick(recyclerItem: RecyclerItem, position: Int) {
             recyclerItem.isFavorite = true
-            App.instance.db.recyclerItemDao.updateFavourites(recyclerItem.nameFilm, 1)
+            App.appComponent.db().recyclerItemDao.updateFavourites(recyclerItem.nameFilm, 1)
             Toast.makeText(context,"Успешно добавлено", Toast.LENGTH_LONG).show()
         }
 

@@ -15,7 +15,7 @@ class MainViewModel: ViewModel() {
     private val boundaryCallback = BoundaryCallBack(repository)
     val errorFromApi  = repository.error
     val listOfObject: LiveData<PagedList<RecyclerItem>>? =
-        App.instance.db.recyclerItemDao.getAll()?.toLiveData(pageSize = App.PAGE_SIZE, boundaryCallback = boundaryCallback)
+        App.appComponent.db().recyclerItemDao.getAll()?.toLiveData(pageSize = App.PAGE_SIZE, boundaryCallback = boundaryCallback)
     fun refreshRequestToApi() {
         boundaryCallback.requestAndSaveData()
     }

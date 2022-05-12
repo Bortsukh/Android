@@ -22,7 +22,7 @@ class FavoritesFragment : Fragment() {
     private lateinit var vm : FavoritesViewModel
 
     private fun deleteFromFavorites(recyclerItem: RecyclerItem, position: Int) {
-        App.instance.db.recyclerItemDao.updateFavourites(recyclerItem.nameFilm, 0)
+        App.appComponent.db().recyclerItemDao.updateFavourites(recyclerItem.nameFilm, 0)
         Snackbar.make(requireView(),"Удалено из избранного", Snackbar.LENGTH_LONG).show()
     }
 
