@@ -35,6 +35,14 @@
             app:popupTheme="@style/Theme.AppCompat.DayNight" />
     </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        <Button
+            android:id="@+id/set_date"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:backgroundTint="@color/purple_200"
+            android:text="watch later" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

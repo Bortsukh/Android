@@ -1,9 +1,14 @@
 package com.example.myapplication
 
 import android.app.Application
+import android.content.ContentValues.TAG
+import android.util.Log
+import android.widget.Toast
 import androidx.room.Room
 import com.example.myapplication.model.api.Api
 import com.example.myapplication.model.db.AppDataBase
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,6 +31,20 @@ class App : Application() {
         ).allowMainThreadQueries().build()
 
         initRetrofit()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            Log.d(TAG, token)
+            Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
+        })
     }
 
     private fun initRetrofit() {

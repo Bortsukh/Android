@@ -34,8 +34,8 @@ class FavoritesFragment : Fragment() {
         override fun onItemShortClick(recyclerItem: RecyclerItem, position: Int) {
             val fragment = DetailsFragment()
             val arguments = Bundle().apply {
-                putString(MainFragment.FILM_DETAILS, recyclerItem.filmDetails)
-                putString(MainFragment.FILM_IMAGE, recyclerItem.imageFilm) }
+                putString(DetailsFragment.FILM_DETAILS, recyclerItem.filmDetails)
+                putString(DetailsFragment.FILM_IMAGE, recyclerItem.imageFilm) }
             fragment.arguments = arguments
             activity!!.supportFragmentManager.beginTransaction().replace(R.id.main_frame_layout, fragment).commit()
         }
