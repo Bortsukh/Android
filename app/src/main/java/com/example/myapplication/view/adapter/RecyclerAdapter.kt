@@ -23,26 +23,6 @@ class RecyclerAdapter(
         holder.bind(getItem(position)!!, itemClickListener )
     }
 
-//    override fun getItemCount(): Int {
-//        return values.size
-//    }
-//
-//    fun setValues(items: List<RecyclerItem>) {
-//        values.clear()
-//        values.addAll(items)
-//        notifyDataSetChanged()
-//    }
-//
-//    fun removeItem(position: Int) {
-//        values.removeAt(position)
-//        notifyItemRemoved(position)
-//    }
-//
-//    fun changeColorFavorite(item: RecyclerItem) {
-//        values.asSequence().filter { it.nameFilm == item.nameFilm }.forEach { it.isFavorite = false }
-//        notifyDataSetChanged()
-//    }
-
     companion object {
         private val FILM_COMPARATOR = object : DiffUtil.ItemCallback<RecyclerItem>() {
             override fun areItemsTheSame(oldItem: RecyclerItem, newItem: RecyclerItem): Boolean =
