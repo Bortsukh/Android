@@ -37,6 +37,7 @@ class ExampleInstrumentedTest {
     var activityRule: ActivityScenarioRule<MainActivity> =
         ActivityScenarioRule(MainActivity::class.java)
 
+
     @Test
     fun useAppContext() {
         // Context of the app under test.
